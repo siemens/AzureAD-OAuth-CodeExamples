@@ -1,6 +1,6 @@
-#OAuth Example Collection
+# OAuth Example Collection
 
-##Overview
+## Overview
 
 This repository contains multiple examples on how to implement different OAuth Flows in order to use the GraphAPI.
 The examples are provided in different programming languages, which should represent common languages used for the different application types.
