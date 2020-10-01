@@ -7,23 +7,14 @@ const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const argv = require('yargs')
-    .usage('Usage: $0 -sample [sample-name] -p [PORT]')
-    .alias('s', 'sample')
+    .usage('Usage: $0 -p [PORT]')
     .alias('p', 'port')
-    .describe('sample', '(Optional) Name of sample to run')
     .describe('port', '(Optional) Port Number - default is 30662')
     .strict()
     .argv;
 
 const DEFAULT_PORT = 30662;
 const APP_DIR = __dirname + `/app`;
-
-// Get all sample folders
-const sampleFolders = fs.readdirSync(APP_DIR, { withFileTypes: true }).filter(function(file) {
-    return file.isDirectory() && file.name !== "sample_template";
-}).map(function(file) {
-    return file.name;
-});
 
 //initialize express.
 const app = express();
@@ -34,18 +25,12 @@ if (argv.p) {
     port = argv.p;
 }
 
-// Configure morgan module to log all requests.
+// Configure morgan module to log all requests to console.
 app.use(morgan('dev'));
 
-// Set the front-end folder to serve public assets.
-app.use("/lib", express.static(path.join(__dirname, "../../../lib/msal-browser/lib")));
-
+// Serve the frontend.
 app.use(express.static('app/'));
 
-// Set up a route for index.html.
-app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
-});
 
 // Start the server.
 app.listen(port);
