@@ -3,29 +3,36 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Quickstart | MSAL.JS Vanilla JavaScript SPA</title>
+    <title>OAuth 2.0 with Azure Active Directory Example</title>
 			
+	<!-- MSAL Browser lib delivered by CDN -->
 	<script src="https://alcdn.msauth.net/browser/2.1.0/js/msal-browser.min.js" integrity="sha384-EmYPwkfj+VVmL1brMS1h6jUztl4QMS8Qq8xlZNgIT/luzg7MAzDVrRa2JxbNmk/e" crossorigin="anonymous"></script>
     
     <!-- adding Bootstrap 4 for UI components  -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="SHORTCUT ICON" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon">
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="/">MS Identity Platform</a>
+      <a class="navbar-brand" href="/">
+		  OAuth 2.0 with Azure Active Directory
+		  Examples
+	  </a>
       <div class="btn-group ml-auto dropleft">
           <button type="button" id="SignIn" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Sign In
           </button>
           <div class="dropdown-menu">
-            <button class="dropdown-item" id="loginPopup" onclick="signIn(this.id)">Sign in using Popup</button>
-            <button class="dropdown-item" id="loginRedirect" onclick="signIn(this.id)">Sign in using Redirect</button>
+            <button class="dropdown-item" id="loginPopup" onclick="signInPopup()">
+				Sign in using Popup
+			</button>
+            <button class="dropdown-item" id="loginRedirect" onclick="signInRedirect()">
+				Sign in using Redirect
+			</button>
           </div>
       </div>
     </nav>
     <br>
-    <h5 class="card-header text-center">Vanilla JavaScript SPA calling MS Graph API with MSAL.JS</h5>
+    <h5 class="card-header text-center">JavaScript SPA calling MS Graph API with MSAL.JS</h5>
     <br>
     <div class="row" style="margin:auto" >
     <div id="card-div" class="col-md-3" style="display:none">

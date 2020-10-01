@@ -21,13 +21,13 @@ function updateUI(data, endpoint) {
 
     if (endpoint === graphConfig.graphMeEndpoint) {
         const title = document.createElement('p');
-        title.innerHTML = "<strong>Title: </strong>" + data.jobTitle;
+        //title.innerHTML = "<strong>Title: </strong>" + data.jobTitle;
         const email = document.createElement('p');
         email.innerHTML = "<strong>Mail: </strong>" + data.mail;
         const phone = document.createElement('p');
-        phone.innerHTML = "<strong>Phone: </strong>" + data.businessPhones[0];
+        //phone.innerHTML = "<strong>Phone: </strong>" + data.businessPhones[0];
         const address = document.createElement('p');
-        address.innerHTML = "<strong>Location: </strong>" + data.officeLocation;
+        //address.innerHTML = "<strong>Location: </strong>" + data.officeLocation;
         profileDiv.appendChild(title);
         profileDiv.appendChild(email);
         profileDiv.appendChild(phone);

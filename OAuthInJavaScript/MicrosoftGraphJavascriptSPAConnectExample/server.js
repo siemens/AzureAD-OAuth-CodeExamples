@@ -2,11 +2,10 @@
 *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 *  See LICENSE in the source repository root for complete license information.
 */
-const express = require('express');
-const morgan = require('morgan');
-const fs = require('fs');
-const path = require('path');
-const argv = require('yargs')
+const express = require('express'); // Web server
+const morgan = require('morgan'); // Debug logging
+const fs = require('fs'); // Serve static from file system
+const argv = require('yargs') // CLI args
     .usage('Usage: $0 -p [PORT]')
     .alias('p', 'port')
     .describe('port', '(Optional) Port Number - default is 30662')
@@ -30,7 +29,6 @@ app.use(morgan('dev'));
 
 // Serve the frontend.
 app.use(express.static('app/'));
-
 
 // Start the server.
 app.listen(port);

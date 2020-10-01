@@ -1,14 +1,3 @@
-// Browser check variables
-// If you support IE, our recommendation is that you sign-in using Redirect APIs
-// If you as a developer are testing using Edge InPrivate mode, please add "isEdge" to the if check
-const ua = window.navigator.userAgent;
-const msie = ua.indexOf("MSIE ");
-const msie11 = ua.indexOf("Trident/");
-const msedge = ua.indexOf("Edge/");
-const isIE = msie > 0 || msie11 > 0;
-const isEdge = msedge > 0;
-
-let signInType;
 let accountId = "";
 
 // Create the main myMSALObj instance
@@ -22,32 +11,35 @@ myMSALObj.handleRedirectPromise().then(handleResponse).catch(err => {
 
 function handleResponse(resp) {
     if (resp !== null) {
+		// resp present -> this is a redirect from login
         accountId = resp.account.homeAccountId;
         showWelcomeMessage(resp.account);
     } else {
-        // need to call getAccount here?
+		// no resp present -> no redirect
+		// check if there are any cached accounts
         const currentAccounts = myMSALObj.getAllAccounts();
         if (!currentAccounts || currentAccounts.length < 1) {
             return;
-        } else if (currentAccounts.length > 1) {
-            // Add choose account code here
-        } else if (currentAccounts.length === 1) {
+        } else if (currentAccounts.length >= 1) {
+			// Choose first available account
             accountId = currentAccounts[0].homeAccountId;
             showWelcomeMessage(currentAccounts[0]);
         }
     }
 }
 
-async function signIn(method) {
-    signInType = isIE ? "loginRedirect" : method;
-    if (signInType === "loginPopup") {
-        return myMSALObj.loginPopup(loginRequest).then(handleResponse).catch(function (error) {
-            console.log(error);
-        });
-    } else if (signInType === "loginRedirect") {
-        return myMSALObj.loginRedirect(loginRequest)
-    }
+async function signInPopup()
+{
+	return myMSALObj.loginPopup(tokenRequestParams).
+		then(handleResponse).
+		catch(console.log);
 }
+
+async function signInRedirect()
+{
+	return myMSALObj.loginRedirect(tokenRequestParams);
+}
+
 
 function signOut() {
     const logoutRequest = {
@@ -72,7 +64,6 @@ async function getTokenPopup(request, account) {
     });
 }
 
-// This function can be removed if you do not need to support IE
 async function getTokenRedirect(request, account) {
     request.account = account;
     return await myMSALObj.acquireTokenSilent(request).catch(async (error) => {
