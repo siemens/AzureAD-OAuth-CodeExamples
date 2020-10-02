@@ -7,6 +7,10 @@
 			
 	<!-- MSAL Browser lib delivered by CDN -->
 	<script src="https://alcdn.msauth.net/browser/2.1.0/js/msal-browser.min.js" integrity="sha384-EmYPwkfj+VVmL1brMS1h6jUztl4QMS8Qq8xlZNgIT/luzg7MAzDVrRa2JxbNmk/e" crossorigin="anonymous"></script>
+
+	<!-- MS Graph Client SDK delivered by CDN -->
+	<script type="text/javascript"
+		src="https://cdn.jsdelivr.net/npm/@microsoft/microsoft-graph-client@2.0.0/lib/graph-js-sdk.js" integrity="sha384-XiUC8x2xP6i/a1pVa/BrNkc+T5U2GSb3a5DqG7N4T7iU7dugCnm4jbK8y+1S0utV" crossorigin="anonymous"></script>
     
     <!-- adding Bootstrap 4 for UI components  -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -35,10 +39,12 @@
         <div id="profile-div"></div>
         <br>
         <br>
-        <button class="btn btn-primary" id="seeProfile" onclick="seeProfile()">See Profile</button>
+        <button class="btn btn-primary" id="seeProfile"
+			onclick="seeProfileRedirect()">See Profile</button>
         <br>
         <br>
-        <button class="btn btn-primary" id="readMail" onclick="readMail()">Read Mails</button>
+        <button class="btn btn-primary" id="readMail"
+			onclick="readMailRedirect()">Read Mails</button>
       </div>
     </div>
     </div>

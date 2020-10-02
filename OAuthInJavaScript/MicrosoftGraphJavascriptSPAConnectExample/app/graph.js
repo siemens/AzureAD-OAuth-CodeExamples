@@ -1,64 +1,36 @@
-// Helper function to call MS Graph API endpoint 
-// using authorization bearer token scheme
-function callMSGraph(endpoint, accessToken, callback) {
-    const headers = new Headers();
-    const bearer = `Bearer ${accessToken}`;
+/* Graph calls via Graph Client SDK */
 
-    headers.append("Authorization", bearer);
+const authProvider =
+{
+	getAccessToken: async () => 
+	{
+		console.log('Graph API Auth middleware called.');
 
-    const options = {
-        method: "GET",
-        headers: headers
-    };
+		const currentAcc = myMSALObj.getAccountByHomeId(accountId);
 
-    console.log('request made to Graph API at: ' + new Date().toString());
+		if (currentAcc)
+		{
+			const response = await getTokenRedirect(tokenRequestParams, currentAcc).
+				catch(console.log);
+			return response.accessToken;
+		}
+	}
+};
 
-    fetch(endpoint, options)
-        .then(response => response.json())
-        .then(response => callback(response, endpoint))
-        .catch(error => console.log(error));
+const graphClient = MicrosoftGraph.Client.initWithMiddleware({authProvider});
+
+async function seeProfileRedirect()
+{
+	let profileData = await graphClient.api('/me').
+		select('id,mail,businessPhones').get();
+	updateUIWithProfileInfo(profileData);
+
 }
 
-async function seeProfile() {
-    const currentAcc = myMSALObj.getAccountByHomeId(accountId);
-    if (currentAcc) {
-        const response = await getTokenPopup(tokenRequestParams, currentAcc).catch(error => {
-            console.log(error);
-        });
-        callMSGraph(graphConfig.graphMeEndpoint, response.accessToken, updateUI);
-        profileButton.style.display = 'none';
-    }
-}
-
-async function readMail() {
-    const currentAcc = myMSALObj.getAccountByHomeId(accountId);
-    if (currentAcc) {
-        const response = await getTokenPopup(tokenRequestParams, currentAcc).catch(error => {
-            console.log(error);
-        });
-        callMSGraph(graphConfig.graphMailEndpoint, response.accessToken, updateUI);
-        mailButton.style.display = 'none';
-    }
-}
-
-async function seeProfileRedirect() {
-    const currentAcc = myMSALObj.getAccountByHomeId(accountId);
-    if (currentAcc) {
-        const response = await getTokenRedirect(tokenRequestParams, currentAcc).catch(error => {
-            console.log(error);
-        });
-        callMSGraph(graphConfig.graphMeEndpoint, response.accessToken, updateUI);
-        profileButton.style.display = 'none';
-    }
-}
-
-async function readMailRedirect() {
-    const currentAcc = myMSALObj.getAccountByHomeId(accountId);
-    if (currentAcc) {
-        const response = await getTokenRedirect(tokenRequestParams, currentAcc).catch(error => {
-            console.log(error);
-        });
-        callMSGraph(graphConfig.graphMailEndpoint, response.accessToken, updateUI);
-        mailButton.style.display = 'none';
-    }
+async function readMailRedirect()
+{
+	let mailData = await graphClient.api('/me/messages').
+		select('subject,from,bodyPreview').top(10).get();
+	console.log(mailData);
+	updateUIWithMessages(mailData);
 }
