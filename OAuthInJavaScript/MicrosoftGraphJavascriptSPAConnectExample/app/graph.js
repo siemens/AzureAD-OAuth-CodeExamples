@@ -1,5 +1,7 @@
 /* Graph calls via Graph Client SDK */
 
+const sharedMailBox = 'graph@alexcomma.onmicrosoft.com';
+
 const authProvider =
 {
 	getAccessToken: async () => 
@@ -31,6 +33,13 @@ async function readMailRedirect()
 {
 	let mailData = await graphClient.api('/me/messages').
 		select('subject,from,bodyPreview').top(10).get();
-	console.log(mailData);
-	updateUIWithMessages(mailData);
+	updateUIWithMessages(mailData, "personal mailbox");
+}
+
+async function readMailSharedRedirect()
+{
+	let sharedMailData = await graphClient.
+		api(`/users/${sharedMailBox}/messages`).
+		select('subject,from,bodyPreview').top(10).get();
+	updateUIWithMessages(sharedMailData, sharedMailBox);
 }

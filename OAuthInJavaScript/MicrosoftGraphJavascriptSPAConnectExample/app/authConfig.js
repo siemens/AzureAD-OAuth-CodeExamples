@@ -39,5 +39,5 @@ const msalConfig = {
 };
 
 const tokenRequestParams = {
-    scopes: ["openid", "profile", "User.Read", "Mail.Read"]
+    scopes: ["openid", "profile", "User.Read", "Mail.Read", "Mail.Read.Shared"]
 };

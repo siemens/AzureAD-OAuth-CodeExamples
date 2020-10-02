@@ -31,3 +31,5 @@ msal cdn info: https://www.npmjs.com/package/msal
 - maybe polyfills needed for graph
 
 - only redirect option presented, one could also use popups
+
+- graph without sdk js does not support shared mailbox

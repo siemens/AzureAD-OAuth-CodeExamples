@@ -3,6 +3,7 @@ const welcomeDiv = document.getElementById("WelcomeMessage");
 const signInButton = document.getElementById("SignIn");
 const cardDiv = document.getElementById("card-div");
 const mailButton = document.getElementById("readMail");
+const sharedMailButton = document.getElementById("readMailShared");
 const profileButton = document.getElementById("seeProfile");
 const profileDiv = document.getElementById("profile-div");
 
@@ -34,13 +35,18 @@ function updateUIWithProfileInfo(data) {
 	}
 }
 
-function updateUIWithMessages(data) {
+function updateUIWithMessages(data, mailSource) {
 	mailButton.style.display = 'none';
+	sharedMailButton.style.display = 'none';
 	if (data.value.length < 1) {
 		alert("Your mailbox is empty!")
 	} else {
 		const tabList = document.getElementById("list-tab");
 		const tabContent = document.getElementById("nav-tabContent");
+
+		const mailSourceInfo = document.createElement("p");
+		mailSourceInfo.innerHTML = `Mail from <strong>${mailSource}</strong>:`;
+		tabList.appendChild(mailSourceInfo);
 
 		data.value.map((d, i) => {
 			// Keeping it simple
