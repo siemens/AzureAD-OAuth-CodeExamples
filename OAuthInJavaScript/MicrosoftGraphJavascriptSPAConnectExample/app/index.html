@@ -17,18 +17,11 @@
 		  OAuth 2.0 with Azure Active Directory
 		  Examples
 	  </a>
-      <div class="btn-group ml-auto dropleft">
-          <button type="button" id="SignIn" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="btn-group ml-auto">
+		  <button type="button" id="SignIn" class="btn btn-secondary"
+            onclick="signInRedirect()">
             Sign In
           </button>
-          <div class="dropdown-menu">
-            <button class="dropdown-item" id="loginPopup" onclick="signInPopup()">
-				Sign in using Popup
-			</button>
-            <button class="dropdown-item" id="loginRedirect" onclick="signInRedirect()">
-				Sign in using Redirect
-			</button>
-          </div>
       </div>
     </nav>
     <br>

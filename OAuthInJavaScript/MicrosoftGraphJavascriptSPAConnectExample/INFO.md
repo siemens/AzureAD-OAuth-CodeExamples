@@ -27,3 +27,7 @@ const isEdge = msedge > 0;
 msal cdn info: https://www.npmjs.com/package/msal
 
 - token cache in session (????)
+
+- maybe polyfills needed for graph
+
+- only redirect option presented, one could also use popups

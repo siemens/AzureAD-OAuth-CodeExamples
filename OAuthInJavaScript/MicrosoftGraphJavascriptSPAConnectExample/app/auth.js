@@ -28,12 +28,14 @@ function handleResponse(resp) {
     }
 }
 
+/*
 async function signInPopup()
 {
 	return myMSALObj.loginPopup(tokenRequestParams).
 		then(handleResponse).
 		catch(console.log);
 }
+*/
 
 async function signInRedirect()
 {
@@ -49,6 +51,7 @@ function signOut() {
     myMSALObj.logout(logoutRequest);
 }
 
+/*
 async function getTokenPopup(request, account) {
     request.account = account;
     return await myMSALObj.acquireTokenSilent(request).catch(async (error) => {
@@ -63,6 +66,7 @@ async function getTokenPopup(request, account) {
         }
     });
 }
+*/
 
 async function getTokenRedirect(request, account) {
     request.account = account;
