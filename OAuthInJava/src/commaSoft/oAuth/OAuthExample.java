@@ -40,7 +40,7 @@ public class OAuthExample {
 		// By setting *TokenPersistence* on the PublicClientApplication,
 		// MSAL will call *beforeCacheAccess()* before accessing the cache and
 		// *afterCacheAccess()* after accessing the cache.
-		PublicClientApplication pca = PublicClientApplication.builder(clientID)
+		IPublicClientApplication pca = PublicClientApplication.builder(clientID)
 				.setTokenCacheAccessAspect(tokenCache)
 				.authority(authority)
 				.build();

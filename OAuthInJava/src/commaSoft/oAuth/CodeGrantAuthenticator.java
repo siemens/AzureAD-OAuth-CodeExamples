@@ -9,12 +9,12 @@ import com.microsoft.graph.http.IHttpRequest;
 
 public class CodeGrantAuthenticator implements IAuthenticationProvider {
 
-	private PublicClientApplication pca;
+	private IPublicClientApplication pca;
 	private IAccount account;
 	private Set<String> scopes;
 	private String redirectUri;
 
-	public CodeGrantAuthenticator(PublicClientApplication pca, IAccount account, Set<String> scopes, String redirectUri) {
+	public CodeGrantAuthenticator(IPublicClientApplication pca, IAccount account, Set<String> scopes, String redirectUri) {
 		this.pca = pca;
 		this.account = account;
 		this.scopes = scopes;
@@ -29,7 +29,7 @@ public class CodeGrantAuthenticator implements IAuthenticationProvider {
 	}
 
 
-	public IAuthenticationResult acquireToken(PublicClientApplication pca, IAccount account) {
+	public IAuthenticationResult acquireToken(IPublicClientApplication pca, IAccount account) {
 		IAuthenticationResult result = null;
 		boolean doInteractively = account == null;
 
