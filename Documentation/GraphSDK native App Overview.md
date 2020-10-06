@@ -14,6 +14,14 @@ tokens in a cache and automatically tries to acquire a new access token from a
 refresh token if necessary. This minimizes the necessity for interactive user 
 login, even across multiple runs of the application. 
 
+## App registration
+
+For this example, an app registration with a `public client/native (mobile & desktop)` 
+redirect URI is required. For what value to use as a redirect URI, refer to the chapter 
+below. The registration was set up as a single tenant application 
+(`Accounts in this organzational directory only`)
+
+
 ## Application structure
 
 ### Configuration
