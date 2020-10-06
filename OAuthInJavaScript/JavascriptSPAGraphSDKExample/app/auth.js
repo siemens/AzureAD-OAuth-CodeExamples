@@ -4,7 +4,7 @@ let accountId = "";
 // configuration parameters are located at authConfig.js
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
-// Redirect: once login is successful and redirects with tokens, call Graph API
+// Register handleResponse to be called on OAuth redirects
 myMSALObj.handleRedirectPromise().then(handleResponse).catch(err => {
     console.error(err);
 });
