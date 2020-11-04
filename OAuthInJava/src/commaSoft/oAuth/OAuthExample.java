@@ -15,9 +15,9 @@ import java.nio.file.*;
 public class OAuthExample {
 
 	// Directory (tenant) ID from Azure => java wants an "authority" property, which includes the whole URI
-	private static final String authority = "https://login.microsoftonline.com/27db00a0-427e-4f65-acc7-191ca3302345"; // alexcomma#
+	private static final String authority = "https://login.microsoftonline.com/38ae3bcd-9579-4fd4-adda-b42e1495d55a"; // alexcomma#
 	// Application (client) ID from Azure
-	private static final String clientID = "11044352-a17d-481d-9226-11bd836e4828"; // mw-wia-appreg
+	private static final String clientID = "a38ac9c9-3396-4d2d-b002-8f1b0f8f644a"; // mw-wia-appreg
 	// One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
 	private static final String redirectUri = "http://localhost";
 
