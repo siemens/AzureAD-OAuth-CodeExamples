@@ -1,0 +1,16 @@
+{
+  "name": "microsoftgraphjavascriptspaconnectexample",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "yargs": "^16.0.3"
+  }
+}

@@ -25,6 +25,7 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Services
             // More info about MSAL Client Applications: https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/Client-Applications
             _app = ConfidentialClientApplicationBuilder.Create(azureOptions.ClientId)
                     .WithClientSecret(azureOptions.ClientSecret)
+                    //.WithCertificate(certificate)  // if using a certificate, use this line instead of the .WithClientSecret
                     .WithRedirectUri(azureOptions.BaseUrl + azureOptions.CallbackPath)
                     .WithTenantId(azureOptions.TenantId)
                     .Build();

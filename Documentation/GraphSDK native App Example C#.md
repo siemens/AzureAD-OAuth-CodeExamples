@@ -1,71 +1,75 @@
-﻿# GraphSDKWithTokenCache Example (.NET Core 3.1 Application in C#)
+# GraphSDK native App Example C# version (dotnet core)
 
-## Overview
+## Re-using the code
 
-This is an example application that retrieves the last 10 mails of the logged
-in user from the Graph API.
+If you wish to re-use the code for another application, please take note of
+the following:
 
-Log-in is performed via an Authorization Code Grant Flow with PKCE. The
-details of this flow are handled by libraries.
+### Dependencies
 
-In order to make authorized requests against the Graph API, an access token is
-used. This example application handles local storage of access and refresh
-tokens and automatically tries to acquire a new access token from a refresh
-token if necessary. This minimizes the necessity for interactive user login,
-even across multiple ru nsof the application. 
+The code requires the NuGet packages mentioned at the beginning of the code,
+next to their respective `using` declarations.
+
+In particular, the
+[Microsoft.Identity.Client.Extensions.Msal](https://github.com/AzureAD/microsoft-authentication-extensions-for-dotnet)
+package is used to provide serialization of the token cache to a file.
 
 This application works cross-platform (Windows, Linux, macOS), but it has only
 been tested on Windows 10.
 
-## Application structure
-
 ### Configuration
 
-All configuration settings are stored in variables at the beginning of the
-`Program` class.
+The strings in the `Client application configuration` and `Token cache configuration` 
+region must be set to the correct values as documented in the code.
 
-#### Redirect URI
+### Exceptions
 
-This value must match one of the redirect URIs configured in the application
-registration.
+There is almost no exception handling in the code to keep it concise.
+Depending on your requirements and the environment where your code runs, you
+should particularly keep in mind the following potential problems:
 
-You must redirect to the localhost on HTTP. In the background, a web server is
-started by the application. The authentication provider will redirect to this
-web server, giving the application access to the required data.
+- Token cache file I/O problems
+- Argument validation if some of the configuration variables are exposed
+- Network problems
+- Interactive authentication problems (user denies consent, user cancels
+  authentication, ...)
 
-In this example, `http://localhost` is used. As there is no port specified,
-the used library will automatically use a free port ("any port").
+In general, all the calls that rely on external factors (I/O, network, user
+interaction, ...) are async in this example.
 
-However, you cannot use any port binding with B2C or ADFS 2019 accounts as of
-2020-09-08. In this case, you must specify a free port to be used, e.g.,
-`http://localhost:52021`.
+### User account management
 
-#### Scopes
+In order to acquire tokens silently from the cache, you need to specify a UPN.
+There are multiple ways to handle this UPN.
 
-In the example, there are two scopes requested explicitly.
+The example program has a quite simple implementation which uses the first UPN
+that comes along if available. Obviously, there is no control of the concrete
+UPN which is used.
 
-1. The `offline_access` scope must always be requested explicitly if you wish
-   to obtain a refresh token (which is usually the case). Without the refresh
-   token, the user will have to perform an interactive sign-in frequently.
-2. The scope `https://graph.microsoft.com/mail.read` is application specific.
-   In this example, it grants the application access to the users mails
-   (`client.Me.Messages`).
+On the one hand, if your program is always to be used with the same UPN, you
+could store the UPN in a configuration file.
 
-In a different application, you should generally request 1. and replace 2.
-by the scopes the application needs. These could be multiple scopes, but they
-must be from the same API (MS Graph in this case).
+On the other hand, if your program is used with different UPNs, you should
+probably implement a more sophisticated way of choosing a UPN and looking for
+matching accounts in the cache (as exposed by `pca.GetAccountsAsync`).
 
-The `openid` and `profile` scopes will be requested automatically, so they are
-left out in this example, but they should be in the list of scopes to check
-for if you decide to verify that you have obtained the desired scopes.
+### `AuthenticateRequestAsyncDelegate`
 
-It is _not_ recommended to use the `https://graph.microsoft.com/.default`
-scope because of its cumbersome behavior when permissions are changed (in the
-AAD App Registration).
+This delegate is defined as 
+`public delegate Task AuthenticateRequestAsyncDelegate(HttpRequestMessage request);`
 
-### Main method
+In this example, an instance is created by a static private method.
+One could also pass the async lambda to the `DelegateAuthenticationProvider`
+constructor inline, or one could have a instance method with the signature
+`Task MyMethod (HttpRequestMessage request)` somewhere and pass `MyMethod` to
+the mentioned constructor. This does _not_ work here because we need to inject
+the `pca` and `userPrincipalName` variables.
 
-The `Main` method consists of the following regions:
+## Code Analysis
+
+For a general introduction to the sample, refer to the overview document which is
+shared for multiple programming languages. This part will only analyze the specific
+implementation in C#. The documentation uses the designated regions in the code.
 
 #### Initialize client application
 
@@ -188,65 +192,4 @@ keep the code brief.
 Finally, the access token is injected into the HTTP request generated by the
 GraphServiceClient which ensures that the request is authenticated.
 
-## Re-using the code
 
-If you wish to re-use the code for another application, please take note of
-the following:
-
-### Dependencies
-
-The code requires the NuGet packages mentioned at the beginning of the code,
-next to their respective `using` declarations.
-
-In particular, the
-[Microsoft.Identity.Client.Extensions.Msal](https://github.com/AzureAD/microsoft-authentication-extensions-for-dotnet)
-package is used to provide serialization of the token cache to a file.
-
-### Configuration
-
-The strings in the `Client application configuration` and `Token cache
-configuration` region must be set to the correct values as documented in the
-code.
-
-### Exceptions
-
-There is almost no exception handling in the code to keep it concise.
-Depending on your requirements and the environment where your code runs, you
-should particularly keep in mind the following potential problems:
-
-- Token cache file I/O problems
-- Argument validation if some of the configuration variables are exposed
-- Network problems
-- Interactive authentication problems (user denies consent, user cancels
-  authentication, ...)
-
-In general, all the calls that rely on external factors (I/O, network, user
-interaction, ...) are async in this example.
-
-### User account management
-
-In order to acquire tokens silently from the cache, you need to specify a UPN.
-There are multiple ways to handle this UPN.
-
-The example program has a quite simple implementation which uses the first UPN
-that comes along if available. Obviously, there is no control of the concrete
-UPN which is used.
-
-On the one hand, if your program is always to be used with the same UPN, you
-could store the UPN in a configuration file.
-
-On the other hand, if your program is used with different UPNs, you should
-probably implement a more sophisticated way of choosing a UPN and looking for
-matching accounts in the cache (as exposed by `pca.GetAccountsAsync`).
-
-### `AuthenticateRequestAsyncDelegate`
-
-This delegate is defined as 
-`public delegate Task AuthenticateRequestAsyncDelegate(HttpRequestMessage request);`
-
-In this example, an instance is created by a static private method.
-One could also pass the async lambda to the `DelegateAuthenticationProvider`
-constructor inline, or one could have a instance method with the signature
-`Task MyMethod (HttpRequestMessage request)` somewhere and pass `MyMethod` to
-the mentioned constructor. This does _not_ work here because we need to inject
-the `pca` and `userPrincipalName` variables.
