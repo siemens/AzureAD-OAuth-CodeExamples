@@ -11,8 +11,11 @@ using Microsoft.Identity.Client.Extensions.Msal; // From NuGet package Microsoft
 
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
+ 
+
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+
 
 namespace GraphSDKWithTokenCache
 {
@@ -20,27 +23,46 @@ namespace GraphSDKWithTokenCache
     {
         #region Client application configuration
         // Directory (tenant) ID from Azure
-        private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
+//        private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
         // Application (client) ID from Azure
-        private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
+//        private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
+
+
+
+ // Directory (tenant) ID from Azure
+        //private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
+        //private const string tenantID = "38ae3bcd-9579-4fd4-adda-b42e1495d55a"; //Siemens siemens.onmicrosoft.com 
+        // Application (client) ID from Azure
+        //private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
+        //private const string clientID = "0b8bcb0c-b666-4db9-a02c-adef12f72950"; // client: AzureAdOffice365TestApplicationChrElsner
+                                                                                // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
+// Directory (tenant) ID from Azure
+        //private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
+  //      private const string tenantID = "38ae3bcd-9579-4fd4-adda-b42e1495d55a"; //Siemens siemens.onmicrosoft.com
+        // Application (client) ID from Azure
+        //private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
+    //    private const string clientID = "0b8bcb0c-b666-4db9-a02c-adef12f72950"; // client: AzureAdOffice365TestApplicationChrElsner
+                                                                                // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
+
+
+private const string tenantID = "1211f716-5b0b-4bfe-b7c9-8e0045b37e3e"; //Siemens siemens.onmicrosoft.com
+        // Application (client) ID from Azure
+        //private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
+        private const string clientID = "4816e08c-6e93-4b74-ae2c-67a4dc1e04a3"; // client: AzureAdOffice365TestApplicationChrElsner
+                                                                                // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
+
+
+
+
         // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
-        private const string redirectUri = "http://localhost";
+        private const string redirectUri = "http://localhost:52021";
 
         // Scopes to be requested.
-        // offline_access is necessary to obtain a refresh token and must be explicitly requested here.
-        // It is not recommended to use the ".default" scope, see the docs.
-        private static readonly string[] scopes = new string[]
-        {
-            // The used library seems to always request openid and profile to ensure that you get the UPN
-            // "openid", "profile",
+        // offline_access is necessary to obtain a refresh token.
+        // If the offline_access permission is configured in Azure, it is part of the .default scope. In this case, it need not explicitly requested.
+        private static readonly string[] scopes = new string[] { "https://graph.microsoft.com/.default", "offline_access" };
 
-            // Always request this scope if you need a refresh token
-            "offline_access",
-            
-            // App specific scopes 
-            "https://graph.microsoft.com/mail.read",            //For access to only own Mailbox
-            "https://graph.microsoft.com/mail.read.shared",     //For access to shared/foreign + own Mailboxes
-        };
+
         #endregion
 
         #region Token cache configuration
@@ -66,8 +88,34 @@ namespace GraphSDKWithTokenCache
 
             #region Initialize cache
             Console.WriteLine("Initializing token cache ...");
-            var storageCreationProperties = GetStorageCreationProperties(tokenCacheFileName,tokenCacheDirectory, clientID);
-            var cacheHelper = await MsalCacheHelper.CreateAsync(storageCreationProperties);
+         //   var storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName,tokenCacheDirectory, clientID).Build();
+
+	//assume OS is Windows 
+	var storageCreationProperties=new StorageCreationPropertiesBuilder(tokenCacheFileName,tokenCacheDirectory, clientID).Build();
+	
+	if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)){
+	    Console.WriteLine("OS is Linux");
+            storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName,tokenCacheDirectory, clientID)
+                .WithLinuxKeyring(
+                    schemaName: "com.microsoft.quantum.iqsharp",
+                    collection: "default",
+                    secretLabel: "Credentials used by Microsoft IQ# kernel",
+                    attribute1: new KeyValuePair<string, string>("Version", "0.1"),
+                    attribute2: new KeyValuePair<string, string>("ProductGroup", "QDK"))
+                .Build();
+	    }
+	else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)){
+	    	Console.WriteLine("OS is OSX");
+	}
+	else //assume Windows
+	    	Console.WriteLine("assume OS is Windows");
+
+
+
+
+
+           var cacheHelper = await MsalCacheHelper.CreateAsync(storageCreationProperties);
+
             cacheHelper.RegisterCache(pca.UserTokenCache);
             #endregion
 
@@ -100,15 +148,27 @@ namespace GraphSDKWithTokenCache
 
             #region Sample graph request
             Console.WriteLine($"Fetching last 10 mails from Graph API ...");
-            //var mails = await client.Users["graph@alexcomma.onmicrosoft.com"].Messages.Request()        // Accessing shared Mailbox
-            var mails = await client.Me.Messages.Request()                                            // Accessing own Mailbox
+            /*
+            var mails = await client.Me.Messages.Request()
               .Select(m => new { m.Subject, m.From })
               .Top(10)
               .GetAsync();
 
             foreach (var mail in mails)
                 Console.WriteLine($"Found mail from {mail.From.EmailAddress.Address} with subject: {mail.Subject}");
+*/
+                User myProfile = await client.Me.Request().GetAsync();
+            Console.WriteLine($"Name:\t{myProfile.DisplayName}");
             #endregion
+            
+
+            
+
+
+
+
+
+
 
             Console.WriteLine("Press any key to exit.");
             Console.Read();
@@ -139,36 +199,5 @@ namespace GraphSDKWithTokenCache
                 msg.Headers.Authorization = new AuthenticationHeaderValue(AUTH_HEADER_PREFIX, accessToken.AccessToken);
             };
         }
-
-        private static StorageCreationProperties GetStorageCreationProperties(string tokenCacheFileName, string tokenCacheDirectory, string clientID)
-        {
-            StorageCreationProperties storageCreationProperties = null;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName, tokenCacheDirectory, clientID)
-                    .WithLinuxKeyring(
-                        schemaName: "com.microsoft.quantum.iqsharp",
-                        collection: "default",
-                        secretLabel: "Credentials used by Microsoft IQ# kernel",
-                        attribute1: new KeyValuePair<string, string>("Version", "0.1"),
-                        attribute2: new KeyValuePair<string, string>("ProductGroup", "QDK"))
-                    .Build();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName, tokenCacheDirectory, clientID)
-                  .WithMacKeyChain(
-                     serviceName: "Microsoft.Quantum.IQSharp",
-                     accountName: "MSALCache")
-                  .Build();
-            }
-            else //assume Windows
-            {
-                storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName, tokenCacheDirectory, clientID).Build();
-            }
-            return storageCreationProperties;
-        }
-
-
     }
 }
