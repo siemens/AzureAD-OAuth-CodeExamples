@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks; // async Main()
 using System.Linq;
 
@@ -21,35 +21,41 @@ namespace GraphSDKWithTokenCache
 {
     class Program
     {
+         private static StorageCreationProperties GetStorageCreationProperties(string tokenCacheFileName, string tokenCacheDirectory, string clientID)
+        {
+            StorageCreationProperties storageCreationProperties = null;
+           if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName, tokenCacheDirectory, clientID)
+                    .WithLinuxKeyring(
+                        schemaName: "com.microsoft.quantum.iqsharp",
+                        collection: "default",
+                        secretLabel: "Credentials used by Microsoft IQ# kernel",
+                        attribute1: new KeyValuePair<string, string>("Version", "0.1"),
+                        attribute2: new KeyValuePair<string, string>("ProductGroup", "QDK"))
+                    .Build();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName, tokenCacheDirectory, clientID)
+                  .WithMacKeyChain(
+                     serviceName: "Microsoft.Quantum.IQSharp",
+                     accountName: "MSALCache")
+                  .Build();
+            }
+            else //assume Windows
+            {
+                storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName, tokenCacheDirectory, clientID).Build();
+            }
+            return storageCreationProperties;
+        }
+
         #region Client application configuration
-        // Directory (tenant) ID from Azure
-//        private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
-        // Application (client) ID from Azure
-//        private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
+  
 
 
-
- // Directory (tenant) ID from Azure
-        //private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
-        //private const string tenantID = "38ae3bcd-9579-4fd4-adda-b42e1495d55a"; //Siemens siemens.onmicrosoft.com 
-        // Application (client) ID from Azure
-        //private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
-        //private const string clientID = "0b8bcb0c-b666-4db9-a02c-adef12f72950"; // client: AzureAdOffice365TestApplicationChrElsner
-                                                                                // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
-// Directory (tenant) ID from Azure
-        //private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
-  //      private const string tenantID = "38ae3bcd-9579-4fd4-adda-b42e1495d55a"; //Siemens siemens.onmicrosoft.com
-        // Application (client) ID from Azure
-        //private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
-    //    private const string clientID = "0b8bcb0c-b666-4db9-a02c-adef12f72950"; // client: AzureAdOffice365TestApplicationChrElsner
-                                                                                // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
-
-
-private const string tenantID = "1211f716-5b0b-4bfe-b7c9-8e0045b37e3e"; //Siemens siemens.onmicrosoft.com
-        // Application (client) ID from Azure
-        //private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
-        private const string clientID = "4816e08c-6e93-4b74-ae2c-67a4dc1e04a3"; // client: AzureAdOffice365TestApplicationChrElsner
-                                                                                // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
+        private const string tenantID = "<your tenantID goes here>";
+        private const string clientID ="<your clientID goes here>";
 
 
 
@@ -90,31 +96,11 @@ private const string tenantID = "1211f716-5b0b-4bfe-b7c9-8e0045b37e3e"; //Siemen
             Console.WriteLine("Initializing token cache ...");
          //   var storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName,tokenCacheDirectory, clientID).Build();
 
-	//assume OS is Windows 
-	var storageCreationProperties=new StorageCreationPropertiesBuilder(tokenCacheFileName,tokenCacheDirectory, clientID).Build();
 	
-	if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)){
-	    Console.WriteLine("OS is Linux");
-            storageCreationProperties = new StorageCreationPropertiesBuilder(tokenCacheFileName,tokenCacheDirectory, clientID)
-                .WithLinuxKeyring(
-                    schemaName: "com.microsoft.quantum.iqsharp",
-                    collection: "default",
-                    secretLabel: "Credentials used by Microsoft IQ# kernel",
-                    attribute1: new KeyValuePair<string, string>("Version", "0.1"),
-                    attribute2: new KeyValuePair<string, string>("ProductGroup", "QDK"))
-                .Build();
-	    }
-	else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)){
-	    	Console.WriteLine("OS is OSX");
-	}
-	else //assume Windows
-	    	Console.WriteLine("assume OS is Windows");
-
-
-
-
-
-           var cacheHelper = await MsalCacheHelper.CreateAsync(storageCreationProperties);
+	        var storageCreationProperties=GetStorageCreationProperties(tokenCacheFileName,tokenCacheDirectory, clientID);
+	
+	
+             var cacheHelper = await MsalCacheHelper.CreateAsync(storageCreationProperties);
 
             cacheHelper.RegisterCache(pca.UserTokenCache);
             #endregion
