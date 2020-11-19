@@ -20,7 +20,7 @@ namespace GraphSDKWithTokenCache
     {
         #region Client application configuration
         // Directory (tenant) ID from Azure
-        private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //alexcomma
+        private const string tenantID = "27db00a0-427e-4f65-acc7-191ca3302345"; //To be changed
         // Application (client) ID from Azure
         private const string clientID = "11044352-a17d-481d-9226-11bd836e4828"; //mw-wia-appreg
         // One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
