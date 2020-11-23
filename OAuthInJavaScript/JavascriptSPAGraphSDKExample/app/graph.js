@@ -1,6 +1,6 @@
 /* Graph calls via Graph Client SDK */
 
-const sharedMailBox = 'graph@alexcomma.onmicrosoft.com';
+const sharedMailBox = 'graph@tenannt.onmicrosoft.com'; //Enter sharedMailBox
 
 const authProvider =
 {
