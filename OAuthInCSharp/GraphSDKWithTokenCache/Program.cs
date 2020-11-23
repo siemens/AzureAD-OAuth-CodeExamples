@@ -1,3 +1,16 @@
+/*
+* Authentication module example, based on OAuth Authorization Code grant using refresh token
+*
+* Copyright (c) Siemens AG, 2020-2022
+*
+* Authors:
+*  OneAD team
+*
+* This work is licensed under the terms of MIT.  See
+* the LICENSE file in the top-level directory.
+*/
+
+
 using System;
 using System.Threading.Tasks; // async Main()
 using System.Linq;
