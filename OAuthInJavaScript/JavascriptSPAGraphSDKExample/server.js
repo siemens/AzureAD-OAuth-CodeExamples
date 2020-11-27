@@ -5,7 +5,7 @@
 
 /* Graph calls via Graph Client SDK to access Email
 *
-g*  Authors:
+*  Authors:
 *  OneAD team
 *
 *  Copyright (c) Siemens 2020 - 2022.  [Changed file app/graph.js]. Licensed under the MIT license.
