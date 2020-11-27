@@ -2,6 +2,16 @@
 *  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 *  See LICENSE in the source repository root for complete license information.
 */
+
+/* Graph calls via Graph Client SDK to access Email
+*
+g*  Authors:
+*  OneAD team
+*
+*  Copyright (c) Siemens 2020 - 2022.  [Changed file app/graph.js]. Licensed under the MIT license.
+*  See LICENSE in the source repository root for complete license information.
+*/
+
 const express = require('express'); // Web server
 const morgan = require('morgan'); // Debug logging
 const fs = require('fs'); // Serve static from file system

@@ -1,4 +1,11 @@
-/* Graph calls via Graph Client SDK */
+/* Graph calls via Graph Client SDK to access Email
+
+* Authors:
+*  OneAD team
+
+*  Copyright (c) Siemens 2020 - 2022.  [Changed file graph.js]. Licensed under the MIT license.
+*  See LICENSE in the source repository root for complete license information.
+*/
 
 const sharedMailBox = 'graph@tenannt.onmicrosoft.com'; //Enter sharedMailBox
 
