@@ -4,7 +4,7 @@
 * Copyright (c) Siemens AG, 2020-2022
 *
 * Authors:
-*  OneAD team
+*  OneAD team in cooperation with Comma Soft AG 
 *
 * This work is licensed under the terms of MIT.  See
 * the LICENSE file in the top-level directory.
