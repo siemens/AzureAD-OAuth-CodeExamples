@@ -28,9 +28,9 @@ import java.nio.file.*;
 public class OAuthExample {
 
 	// Directory (tenant) ID from Azure => java wants an "authority" property, which includes the whole URI
-	private static final String authority = "https://login.microsoftonline.com/00000000-1111-2222-3333-444444444444"; // Enter tenantID
+	private static final String authority = "https://login.microsoftonline.com/00000000-1111-2222-3333-444444444444"; // replace with your tenantID
 	// Application (client) ID from Azure
-	private static final String clientID = "00000000-1111-0000-0000-111111111111"; // Enter ClientID
+	private static final String clientID = "00000000-1111-0000-0000-111111111111"; // replace with your ClientID
 	// One of the configured redirect URIs for the "Auth Code Grant with PKCE" flow
 	private static final String redirectUri = "http://localhost";
 
