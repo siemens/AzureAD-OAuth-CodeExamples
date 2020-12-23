@@ -6,7 +6,7 @@
 const msalConfig = {
     auth: {
         clientId: "<insert your clientID here>",
-        authority: "https://login.microsoftonline.com/<insert your tennantID here>/",
+        authority: "https://login.microsoftonline.com/<insert your tenantID here>/",
         redirectUri: "<insert your redirect URI here>",
     },
     cache: {
