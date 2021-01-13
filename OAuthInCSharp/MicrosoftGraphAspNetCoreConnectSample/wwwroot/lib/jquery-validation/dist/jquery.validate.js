@@ -1,10 +1,11 @@
 /*!
  * jQuery Validation Plugin v1.17.0
  *
- * https://jqueryvalidation.org/
- *
  * Copyright (c) 2017 Jörn Zaefferer
  * Released under the MIT license
+ * 
+ * https://jqueryvalidation.org/
+ *
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
