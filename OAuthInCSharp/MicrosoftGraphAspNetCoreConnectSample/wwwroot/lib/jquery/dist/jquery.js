@@ -1,13 +1,14 @@
 /*!
+ * Copyright JS Foundation and other contributors
+ * Released under the MIT license
+ * https://jquery.org/license
+ * 
  * jQuery JavaScript Library v3.3.1
  * https://jquery.com/
  *
  * Includes Sizzle.js
  * https://sizzlejs.com/
  *
- * Copyright JS Foundation and other contributors
- * Released under the MIT license
- * https://jquery.org/license
  *
  * Date: 2018-01-20T17:24Z
  */
