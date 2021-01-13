@@ -1,3 +1,8 @@
+/*
+*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+*  See LICENSE in the source repository root for complete license information.
+*/
+
 /**
  * Configuration object to be passed to MSAL instance on creation. 
  * For a full list of MSAL.js configuration parameters, visit:
