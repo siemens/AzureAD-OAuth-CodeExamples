@@ -1,3 +1,8 @@
+/*
+*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+*  See LICENSE in the source repository root for complete license information.
+*/
+
 /** 
  * Helper function to call MS Graph API endpoint
  * using the authorization bearer token scheme
